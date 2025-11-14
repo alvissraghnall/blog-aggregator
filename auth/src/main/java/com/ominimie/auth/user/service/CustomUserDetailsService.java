@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.ominimie.auth.auth_provider.domain.AuthProvider;
-import com.ominimie.auth.auth_provider.model.ProviderType;
+import com.ominimie.auth.proto.ProviderType;
 import com.ominimie.auth.auth_provider.repos.AuthProviderRepository;
 import com.ominimie.auth.user.domain.CustomUserDetails;
 import com.ominimie.auth.user.domain.User;

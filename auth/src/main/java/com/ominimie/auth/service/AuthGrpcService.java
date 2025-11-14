@@ -8,10 +8,12 @@ import java.util.UUID;
 import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 
 import com.ominimie.auth.auth_provider.domain.AuthProvider;
 import com.ominimie.auth.auth_provider.repos.AuthProviderRepository;
+import com.ominimie.auth.config.GrpcAuthInterceptor;
 import com.ominimie.auth.user.domain.User;
 import com.ominimie.auth.user.repos.UserRepository;
 
@@ -20,6 +22,7 @@ import com.ominimie.auth.proto.UserInfo;
 import com.ominimie.auth.proto.ValidateTokenRequest;
 import com.ominimie.auth.proto.ValidateTokenResponse;
 import com.ominimie.auth.service.oauth2.OAuth2Service;
+import com.ominimie.auth.service.oauth2.OAuth2TokenIntrospection;
 import com.ominimie.auth.service.oauth2.OAuth2TokenResponse;
 import com.ominimie.auth.service.oauth2.OAuth2TokenService;
 import com.ominimie.auth.service.oauth2.OAuth2UserInfo;
@@ -142,7 +145,7 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
     public void refreshToken(RefreshTokenRequest request, 
                             StreamObserver<AuthResponse> responseObserver) {
         try {
-            OAuth2TokenResponse tokenResponse = oauth2TokenService.refreshToken(
+            OAuth2TokenResponse tokenResponse = oAuth2TokenService.refreshToken(
                 request.getRefreshToken()
             );
 
@@ -169,7 +172,7 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
     public void validateToken(ValidateTokenRequest request, 
                              StreamObserver<ValidateTokenResponse> responseObserver) {
         try {
-            OAuth2TokenIntrospection introspection = oauth2TokenService.introspectToken(
+            OAuth2TokenIntrospection introspection = oAuth2TokenService.introspectToken(
                 request.getToken()
             );
 
@@ -214,7 +217,7 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
 	            authProviderRepository.save(authProvider);
 	        }
 
-	        OAuth2TokenResponse tokenResponse = oauth2TokenService.generateTokensForOAuthUser(user);
+	        OAuth2TokenResponse tokenResponse = oAuth2TokenService.generateTokensForOAuthUser(user);
 
 	        AuthResponse response = buildAuthResponse(user, tokenResponse);
 
@@ -262,7 +265,7 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
     public void getCurrentUser(GetCurrentUserRequest request, 
                               StreamObserver<GetCurrentUserResponse> responseObserver) {
         try {
-            User user = GrpcContextUtil.getCurrentUser();
+            User user = GrpcAuthInterceptor.getCurrentUser();
             
             GetCurrentUserResponse response = GetCurrentUserResponse.newBuilder()
                 .setUser(buildUserInfo(user))

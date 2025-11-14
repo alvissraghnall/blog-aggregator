@@ -1,7 +1,7 @@
 package com.ominimie.auth.auth_provider.repos;
 
 import com.ominimie.auth.auth_provider.domain.AuthProvider;
-import com.ominimie.auth.auth_provider.model.ProviderType;
+import com.ominimie.auth.proto.ProviderType;
 import com.ominimie.auth.user.domain.User;
 
 import java.util.List;

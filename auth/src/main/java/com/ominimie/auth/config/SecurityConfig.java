@@ -31,7 +31,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager() {
         List<AuthenticationProvider> providers = new ArrayList<>();
-        providers.add(new JwtAuthenticationProvider(jwtDecoder()));
+        // providers.add(new JwtAuthenticationProvider(jwtDecoder()));
         return new ProviderManager(providers);
     }
 
