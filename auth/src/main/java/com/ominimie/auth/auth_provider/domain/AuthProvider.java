@@ -1,6 +1,6 @@
 package com.ominimie.auth.auth_provider.domain;
 
-import com.ominimie.auth.auth_provider.model.ProviderType;
+import com.ominimie.auth.proto.ProviderType;
 import com.ominimie.auth.user.domain.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

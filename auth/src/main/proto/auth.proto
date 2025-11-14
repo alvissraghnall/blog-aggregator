@@ -18,7 +18,7 @@ service AuthService {
 
   rpc LinkProvider(LinkProviderRequest) returns (LinkProviderResponse);
   rpc UnlinkProvider(UnlinkProviderRequest) returns (UnlinkProviderResponse);
-  rpc GetCurrentUser(GetCurrentUserRequest) returns (UserResponse);
+  rpc GetCurrentUser(GetCurrentUserRequest) returns (GetCurrentUserResponse);
 }
 
 message RegisterRequest {
@@ -37,11 +37,11 @@ message RefreshTokenRequest {
 }
 
 enum ProviderType {
-  PROVIDER_TYPE_UNSPECIFIED = 0;
-  PROVIDER_TYPE_LOCAL = 1;
-  PROVIDER_TYPE_GOOGLE = 2;
-  PROVIDER_TYPE_GITHUB = 3;
-  PROVIDER_TYPE_APPLE = 4;
+  UNSPECIFIED = 0;
+  LOCAL = 1;
+  GOOGLE = 2;
+  GITHUB = 3;
+  APPLE = 4;
 }
 
 message InitiateOAuthRequest {
@@ -111,6 +111,6 @@ message UnlinkProviderResponse {
 
 message GetCurrentUserRequest {}
 
-message UserResponse {
+message GetCurrentUserResponse {
   UserInfo user = 1;
 }
