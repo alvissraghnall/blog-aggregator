@@ -1,0 +1,12 @@
+GITHUB_CLIENT_ID: test-id
+GITHUB_CLIENT_SECRET: test-secret
+GOOGLE_CLIENT_ID: test-id
+GOOGLE_CLIENT_SECRET: test-secret
+spring:
+    data:
+        mongodb:
+            uri: mongodb://localhost:27017/auth_test
+    grpc:
+        client:
+            default-channel:
+                address: static://in-process-test
