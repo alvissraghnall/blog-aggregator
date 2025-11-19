@@ -19,6 +19,9 @@ service AuthService {
   rpc LinkProvider(LinkProviderRequest) returns (LinkProviderResponse);
   rpc UnlinkProvider(UnlinkProviderRequest) returns (UnlinkProviderResponse);
   rpc GetCurrentUser(GetCurrentUserRequest) returns (GetCurrentUserResponse);
+  
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse);
+  rpc ResendVerificationEmail(ResendVerificationEmailRequest) returns (ResendVerificationEmailResponse);
 }
 
 message RegisterRequest {
@@ -72,7 +75,8 @@ message UserInfo {
   string email = 2;
   string full_name = 3;
   bool active = 4;
-  repeated ProviderInfo providers = 5;
+  bool email_verified = 5;
+  repeated ProviderInfo providers = 6;
 }
 
 message ProviderInfo {
@@ -99,6 +103,7 @@ message LinkProviderRequest {
 message LinkProviderResponse {
   bool success = 1;
   ProviderInfo provider_info = 2;
+  string message = 3;
 }
 
 message UnlinkProviderRequest {
@@ -107,10 +112,29 @@ message UnlinkProviderRequest {
 
 message UnlinkProviderResponse {
   bool success = 1;
+  string message = 2;
 }
 
 message GetCurrentUserRequest {}
 
 message GetCurrentUserResponse {
   UserInfo user = 1;
+}
+
+message VerifyEmailRequest {
+  string token = 1;
+}
+
+message VerifyEmailResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ResendVerificationEmailRequest {
+  string email = 1;
+}
+
+message ResendVerificationEmailResponse {
+  bool success = 1;
+  string message = 2;
 }

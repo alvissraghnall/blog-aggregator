@@ -19,7 +19,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-
 @Document("users")
 @Getter
 @Setter
@@ -39,6 +38,9 @@ public class User {
 
     @NotNull
     private Boolean active;
+
+    @NotNull
+    private Boolean emailVerified = false;
 
     @DocumentReference(lazy = true, lookup = "{ 'user' : ?#{#self._id} }")
     @ReadOnlyProperty

@@ -1,64 +1,43 @@
 package com.ominimie.auth.service;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.grpc.server.service.GrpcService;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-
 import com.ominimie.auth.auth_provider.domain.AuthProvider;
 import com.ominimie.auth.auth_provider.repos.AuthProviderRepository;
-import com.ominimie.auth.config.GrpcAuthInterceptor;
+import com.ominimie.auth.email_verification.service.EmailVerificationService;
+import com.ominimie.auth.proto.*;
+import com.ominimie.auth.service.oauth2.OAuth2Service;
+import com.ominimie.auth.service.oauth2.OAuth2UserInfo;
 import com.ominimie.auth.user.domain.User;
 import com.ominimie.auth.user.repos.UserRepository;
-
-import com.ominimie.auth.proto.RegisterRequest;
-import com.ominimie.auth.proto.UserInfo;
-import com.ominimie.auth.proto.ValidateTokenRequest;
-import com.ominimie.auth.proto.ValidateTokenResponse;
-import com.ominimie.auth.service.oauth2.OAuth2Service;
-import com.ominimie.auth.service.oauth2.OAuth2TokenIntrospection;
-import com.ominimie.auth.service.oauth2.OAuth2TokenResponse;
-import com.ominimie.auth.service.oauth2.OAuth2TokenService;
-import com.ominimie.auth.service.oauth2.OAuth2UserInfo;
-import com.ominimie.auth.proto.AuthResponse;
-import com.ominimie.auth.proto.AuthServiceGrpc;
-import com.ominimie.auth.proto.CompleteOAuthRequest;
-import com.ominimie.auth.proto.GetCurrentUserRequest;
-import com.ominimie.auth.proto.GetCurrentUserResponse;
-import com.ominimie.auth.proto.InitiateOAuthRequest;
-import com.ominimie.auth.proto.InitiateOAuthResponse;
-import com.ominimie.auth.proto.LoginRequest;
-import com.ominimie.auth.proto.ProviderInfo;
-import com.ominimie.auth.proto.ProviderType;
-import com.ominimie.auth.proto.RefreshTokenRequest;
-
+import com.ominimie.auth.user.service.CustomUserDetailsService;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.grpc.server.service.GrpcService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.util.UUID;
 
 @GrpcService
 @RequiredArgsConstructor
 public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
 
     private final UserRepository userRepository;
-    
     private final AuthProviderRepository authProviderRepository;
-    
     private final PasswordEncoder passwordEncoder;
+    private final CustomUserDetailsService userDetailsService;
+    private final TokenService tokenService;
+    private final OAuth2Service oAuth2Service;
+    private final EmailVerificationService emailVerificationService;
     
-    private final JwtDecoder jwtDecoder;
-
-    private final OAuth2TokenService oAuth2TokenService;
-
-	private final OAuth2Service oAuth2Service;
-
     @Override
     public void register(RegisterRequest request, StreamObserver<AuthResponse> responseObserver) {
         try {
@@ -73,6 +52,7 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
             user.setEmail(request.getEmail());
             user.setFullName(request.getFullName());
             user.setActive(true);
+            user.setEmailVerified(false);
             user = userRepository.save(user);
 
             AuthProvider authProvider = new AuthProvider();
@@ -82,7 +62,9 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
             authProvider.setProviderUserEmail(request.getEmail());
             authProviderRepository.save(authProvider);
 
-            OAuth2TokenResponse tokenResponse = oAuth2TokenService.generateTokens(request.getEmail(), request.getPassword());
+            emailVerificationService.generateVerificationToken(user);
+
+            TokenService.TokenResponse tokenResponse = tokenService.generateTokens(user);
 
             AuthResponse response = buildAuthResponse(user, tokenResponse);
             
@@ -98,64 +80,50 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
     @Override
     public void login(LoginRequest request, StreamObserver<AuthResponse> responseObserver) {
         try {
-            User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> Status.UNAUTHENTICATED
-                    .withDescription("Invalid credentials")
-                    .asRuntimeException());
-
-            if (!user.getActive()) {
-                responseObserver.onError(Status.PERMISSION_DENIED
-                    .withDescription("Account is inactive")
-                    .asRuntimeException());
-                return;
+            UserDetails userDetails;
+            try {
+                userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+            } catch (Exception e) {
+                throw Status.UNAUTHENTICATED.withDescription("Invalid credentials").asRuntimeException();
             }
 
-            OAuth2TokenResponse oAuth2TokenResponse = oAuth2TokenService.generateTokens(request.getEmail(),
-                request.getPassword());
+            if (!passwordEncoder.matches(request.getPassword(), userDetails.getPassword())) {
+                throw Status.UNAUTHENTICATED.withDescription("Invalid credentials").asRuntimeException();
+            }
+            
+            if (!userDetails.isEnabled()) {
+                throw Status.PERMISSION_DENIED.withDescription("Account is inactive").asRuntimeException();
+            }
 
-            // AuthProvider localProvider = authProviderRepository
-            //     .findByUserAndProvider(user, ProviderType.LOCAL)
-            //     .orElseThrow(() -> Status.UNAUTHENTICATED
-            //         .withDescription("Invalid credentials")
-            //         .asRuntimeException());
+            User user = userRepository.findByEmail(request.getEmail()).get();
+            
+            // Check if email is verified for local accounts
+            if (!user.getEmailVerified() && authProviderRepository.existsByUserAndProvider(user, ProviderType.LOCAL)) {
+                throw Status.PERMISSION_DENIED.withDescription("Email not verified").asRuntimeException();
+            }
 
-            // if (!passwordEncoder.matches(request.getPassword(), localProvider.getPasswordHash())) {
-            //     responseObserver.onError(Status.UNAUTHENTICATED
-            //         .withDescription("Invalid credentials")
-            //         .asRuntimeException());
-            //     return;
-            // }
+            TokenService.TokenResponse tokenResponse = tokenService.generateTokens(user);
 
-            AuthResponse response = buildAuthResponse(user, oAuth2TokenResponse);
+            AuthResponse response = buildAuthResponse(user, tokenResponse);
             
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (StatusRuntimeException e) {
             responseObserver.onError(e);
-        } catch (BadCredentialsException e) {
-            responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Invalid Credentials").asRuntimeException());
         } catch (Exception e) {
             responseObserver.onError(Status.INTERNAL
                 .withDescription("Login failed: " + e.getMessage())
                 .asRuntimeException());
         }
     }
-	
+    
     @Override
     public void refreshToken(RefreshTokenRequest request, 
                             StreamObserver<AuthResponse> responseObserver) {
         try {
-            OAuth2TokenResponse tokenResponse = oAuth2TokenService.refreshToken(
-                request.getRefreshToken()
-            );
+            TokenService.TokenResponse tokenResponse = tokenService.refreshToken(request.getRefreshToken());
 
-            Jwt jwt = jwtDecoder.decode(tokenResponse.getAccessTokenValue());
-            UUID userId = UUID.fromString(jwt.getClaimAsString("user_id"));
-            
-            User user = userRepository.findById(userId)
-                .orElseThrow(() -> Status.NOT_FOUND
-                    .withDescription("User not found")
-                    .asRuntimeException());
+            User user = tokenService.validateAccessToken(tokenResponse.getAccessToken());
 
             AuthResponse response = buildAuthResponse(user, tokenResponse);
             
@@ -172,105 +140,259 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
     public void validateToken(ValidateTokenRequest request, 
                              StreamObserver<ValidateTokenResponse> responseObserver) {
         try {
-            OAuth2TokenIntrospection introspection = oAuth2TokenService.introspectToken(
-                request.getToken()
-            );
+            User user = tokenService.validateAccessToken(request.getToken());
 
             ValidateTokenResponse.Builder responseBuilder = ValidateTokenResponse.newBuilder()
-                .setValid(introspection.isActive());
-
-            if (introspection.isActive() && introspection.getUser() != null) {
-                responseBuilder.setUser(buildUserInfo(introspection.getUser()));
-            } else if (!introspection.isActive()) {
-                responseBuilder.setError("Token is invalid or expired");
-            }
+                .setValid(true)
+                .setUser(buildUserInfo(user));
 
             responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
         } catch (Exception e) {
-            responseObserver.onError(Status.INTERNAL
-                .withDescription("Token validation failed: " + e.getMessage())
+             ValidateTokenResponse response = ValidateTokenResponse.newBuilder()
+                .setValid(false)
+                .setError("Token is invalid or expired")
+                .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+    }
+
+    @Override
+    public void verifyEmail(VerifyEmailRequest request, 
+                           StreamObserver<VerifyEmailResponse> responseObserver) {
+        try {
+            User user = emailVerificationService.verifyToken(request.getToken());
+        
+            VerifyEmailResponse response = VerifyEmailResponse.newBuilder()
+                .setSuccess(true)
+                .setMessage("Email verified successfully")
+                .build();
+            
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (StatusRuntimeException e) {
+            responseObserver.onError(e);
+        } catch (Exception e) {
+            responseObserver.onError(Status.NOT_FOUND
+                .withDescription("Invalid or expired verification token: " + e.getMessage())
                 .asRuntimeException());
         }
     }
 
-	@Override
-	public void completeOAuth(CompleteOAuthRequest request, 
-	                          StreamObserver<AuthResponse> responseObserver) {
-	    try {
+    @Override
+    public void resendVerificationEmail(ResendVerificationEmailRequest request, 
+                                       StreamObserver<ResendVerificationEmailResponse> responseObserver) {
+        try {
+            User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> Status.NOT_FOUND
+                    .withDescription("User not found")
+                    .asRuntimeException());
+            
+            if (user.getEmailVerified()) {
+                throw Status.ALREADY_EXISTS
+                    .withDescription("Email already verified")
+                    .asRuntimeException();
+            }
 
-	        OAuth2UserInfo userInfo = oAuth2Service.exchangeCodeForUserInfo(
-	            request.getProvider(), 
-	            request.getCode()
-	        );
+            emailVerificationService.deleteExistingTokensForUser(user);
+            emailVerificationService.generateVerificationToken(user);
+            
+            ResendVerificationEmailResponse response = ResendVerificationEmailResponse.newBuilder()
+                .setSuccess(true)
+                .setMessage("Verification email sent")
+                .build();
+                
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            ResendVerificationEmailResponse response = ResendVerificationEmailResponse.newBuilder()
+                .setSuccess(false)
+                .setMessage(e.getMessage())
+                .build();
+                
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+    }
 
-	        User user = userRepository.findByEmail(userInfo.getEmail())
-	            .orElseGet(() -> createUserFromOAuth(userInfo));
+    @Override
+    public void completeOAuth(CompleteOAuthRequest request, 
+                             StreamObserver<AuthResponse> responseObserver) {
+        try {
+            OAuth2UserInfo userInfo = oAuth2Service.exchangeCodeForUserInfo(
+                request.getProvider(), 
+                request.getCode()
+            );
 
-	        AuthProvider authProvider = authProviderRepository
-	            .findByUserAndProvider(user, request.getProvider())
-	            .orElseGet(() -> createAuthProvider(user, request.getProvider(), userInfo));
+            User user = userRepository.findByEmail(userInfo.getEmail())
+                .orElseGet(() -> createUserFromOAuth(userInfo));
 
-	        if (!authProvider.getProviderUserId().equals(userInfo.getId())) {
-	            authProvider.setProviderUserId(userInfo.getId());
-	            authProvider.setProviderUserEmail(userInfo.getEmail());
-	            authProviderRepository.save(authProvider);
-	        }
+            AuthProvider authProvider = authProviderRepository
+                .findByUserAndProvider(user, request.getProvider())
+                .orElseGet(() -> createAuthProvider(user, request.getProvider(), userInfo));
 
-	        OAuth2TokenResponse tokenResponse = oAuth2TokenService.generateTokensForOAuthUser(user);
+            if (!authProvider.getProviderUserId().equals(userInfo.getId())) {
+                authProvider.setProviderUserId(userInfo.getId());
+                authProvider.setProviderUserEmail(userInfo.getEmail());
+                authProviderRepository.save(authProvider);
+            }
 
-	        AuthResponse response = buildAuthResponse(user, tokenResponse);
+            if (!user.getEmailVerified()) {
+                user.setEmailVerified(true);
+                userRepository.save(user);
+            }
 
-	        responseObserver.onNext(response);
-	        responseObserver.onCompleted();
-	    } catch (Exception e) {
-	        responseObserver.onError(Status.INTERNAL
-	            .withDescription("OAuth completion failed: " + e.getMessage())
-	            .asRuntimeException());
-	    }
-	}
+            TokenService.TokenResponse tokenResponse = tokenService.generateTokens(user);
 
-	@Override
-	public void initiateOAuth(InitiateOAuthRequest request, 
-	                         StreamObserver<InitiateOAuthResponse> responseObserver) {
-	    try {
-	        String state = UUID.randomUUID().toString();
-	        
-	        // Store state in cache or database for validation when callback is received
-	        // cacheService.storeOAuthState(state, request.getProvider(), request.getRedirectUri());
-	        
-	        String authorizationUrl = oAuth2Service.buildAuthorizationUrl(
-	            request.getProvider(), 
-	            state, 
-	            request.getRedirectUri()
-	        );
-	        
-	        InitiateOAuthResponse response = InitiateOAuthResponse.newBuilder()
-	            .setAuthorizationUrl(authorizationUrl)
-	            .setState(state)
-	            .build();
-	            
-	        responseObserver.onNext(response);
-	        responseObserver.onCompleted();
-	    } catch (Exception e) {
-	        responseObserver.onError(Status.INTERNAL
-	            .withDescription("Failed to initiate OAuth: " + e.getMessage())
-	            .asRuntimeException());
-	    }
-	}
+            AuthResponse response = buildAuthResponse(user, tokenResponse);
 
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(Status.INTERNAL
+                .withDescription("OAuth completion failed: " + e.getMessage())
+                .asRuntimeException());
+        }
+    }
 
+    @Override
+    public void initiateOAuth(InitiateOAuthRequest request, 
+                             StreamObserver<InitiateOAuthResponse> responseObserver) {
+        try {
+            String state = UUID.randomUUID().toString();
+            
+            String authorizationUrl = oAuth2Service.buildAuthorizationUrl(
+                request.getProvider(), 
+                state, 
+                request.getRedirectUri() // redirect_uri is for client
+            );
+            
+            InitiateOAuthResponse response = InitiateOAuthResponse.newBuilder()
+                .setAuthorizationUrl(authorizationUrl)
+                .setState(state)
+                .build();
+                
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(Status.INTERNAL
+                .withDescription("Failed to initiate OAuth: " + e.getMessage())
+                .asRuntimeException());
+        }
+    }
+
+    @Override
+    public void linkProvider(LinkProviderRequest request, 
+                            StreamObserver<LinkProviderResponse> responseObserver) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Jwt jwt = (Jwt) auth.getPrincipal();
+            UUID userId = UUID.fromString(jwt.getSubject()); 
+            
+            User user = userRepository.findById(userId)
+                .orElseThrow(() -> Status.NOT_FOUND
+                    .withDescription("User not found from token")
+                    .asRuntimeException());
+            
+            if (authProviderRepository.existsByUserAndProvider(user, request.getProvider())) {
+                throw Status.ALREADY_EXISTS
+                    .withDescription("Provider already linked to this account")
+                    .asRuntimeException();
+            }
+            
+            OAuth2UserInfo userInfo = oAuth2Service.exchangeCodeForUserInfo(
+                request.getProvider(), 
+                request.getCode()
+            );
+            
+            AuthProvider authProvider = createAuthProvider(user, request.getProvider(), userInfo);
+            
+            ProviderInfo providerInfo = ProviderInfo.newBuilder()
+                .setProvider(authProvider.getProvider())
+                .setProviderUserEmail(authProvider.getProviderUserEmail() != null ? 
+                    authProvider.getProviderUserEmail() : "")
+                .build();
+            
+            LinkProviderResponse response = LinkProviderResponse.newBuilder()
+                .setSuccess(true)
+                .setProviderInfo(providerInfo)
+                .build();
+                
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            LinkProviderResponse response = LinkProviderResponse.newBuilder()
+                .setSuccess(false)
+                .setMessage(e.getMessage())
+                .build();
+                
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+    }
+
+    @Override
+    public void unlinkProvider(UnlinkProviderRequest request, 
+                              StreamObserver<UnlinkProviderResponse> responseObserver) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Jwt jwt = (Jwt) auth.getPrincipal();
+            UUID userId = UUID.fromString(jwt.getSubject()); 
+            
+            User user = userRepository.findById(userId)
+                .orElseThrow(() -> Status.NOT_FOUND
+                    .withDescription("User not found from token")
+                    .asRuntimeException());
+            
+            AuthProvider authProvider = authProviderRepository.findByUserAndProvider(user, request.getProvider())
+                .orElseThrow(() -> Status.NOT_FOUND
+                    .withDescription("Provider not linked to this account")
+                    .asRuntimeException());
+            
+            // refute unlinking if it's the only auth provider
+            if (authProviderRepository.findByUser(user).size() <= 1) {
+                throw Status.FAILED_PRECONDITION
+                    .withDescription("Cannot unlink the only authentication method")
+                    .asRuntimeException();
+            }
+            
+            authProviderRepository.delete(authProvider);
+            
+            UnlinkProviderResponse response = UnlinkProviderResponse.newBuilder()
+                .setSuccess(true)
+                .build();
+                
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            UnlinkProviderResponse response = UnlinkProviderResponse.newBuilder()
+                .setSuccess(false)
+                .setMessage(e.getMessage())
+                .build();
+                
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+    }
 
     @Override
     public void getCurrentUser(GetCurrentUserRequest request, 
                               StreamObserver<GetCurrentUserResponse> responseObserver) {
         try {
-            User user = GrpcAuthInterceptor.getCurrentUser();
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Jwt jwt = (Jwt) auth.getPrincipal();
+            UUID userId = UUID.fromString(jwt.getSubject()); 
+            
+            User user = userRepository.findById(userId)
+                .orElseThrow(() -> Status.NOT_FOUND
+                    .withDescription("User not found from token")
+                    .asRuntimeException());
             
             GetCurrentUserResponse response = GetCurrentUserResponse.newBuilder()
                 .setUser(buildUserInfo(user))
                 .build();
-
+            
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (Exception e) {
@@ -280,13 +402,13 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
         }
     }
 
-    private AuthResponse buildAuthResponse(User user, OAuth2TokenResponse tokenResponse) {
+    private AuthResponse buildAuthResponse(User user, TokenService.TokenResponse tokenResponse) {
         long expiresIn = Duration.between(Instant.now(), tokenResponse.getAccessTokenExpiresAt())
             .getSeconds();
 
         return AuthResponse.newBuilder()
-            .setAccessToken(tokenResponse.getAccessTokenValue())
-            .setRefreshToken(tokenResponse.getRefreshTokenValue())
+            .setAccessToken(tokenResponse.getAccessToken())
+            .setRefreshToken(tokenResponse.getRefreshToken())
             .setUser(buildUserInfo(user))
             .setExpiresIn(expiresIn)
             .build();
@@ -299,7 +421,8 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
             .setId(user.getId().toString())
             .setEmail(user.getEmail())
             .setFullName(user.getFullName())
-            .setActive(user.getActive());
+            .setActive(user.getActive())
+            .setEmailVerified(user.getEmailVerified());
 
         for (AuthProvider provider : providers) {
             if (provider.getProvider() != ProviderType.LOCAL) {
@@ -308,10 +431,8 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
                     .setProviderUserEmail(provider.getProviderUserEmail() != null ? 
                         provider.getProviderUserEmail() : "")
                     .build());
-                
             }
         }
-
         return builder.build();
     }
 
@@ -320,6 +441,7 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
         user.setEmail(userInfo.getEmail());
         user.setFullName(userInfo.getName());
         user.setActive(true);
+        user.setEmailVerified(true);
         return userRepository.save(user);
     }
 

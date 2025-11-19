@@ -24,6 +24,17 @@ spring:
         jwt:
           issuer-uri: https://ominimie.com
           public-key-location: classpath:jwt-public-key.pub
+  mail:
+    host: smtp.twake.com
+    password: ${EMAIL_PASSWORD}
+    port: 587
+    properties:
+        mail:
+            smtp:
+                auth: true
+                starttls:
+                    enable: true
+    username: ${EMAIL_USERNAME}
 error:
   handling:
     http-status-in-json-response: true
@@ -34,5 +45,10 @@ error:
     codes:
       UserEmailUnique: USER_EMAIL_UNIQUE
       ApiKeyKeyUnique: API_KEY_KEY_UNIQUE
-springdoc:
-  pathsToMatch: /, /api/**
+
+security:
+  oauth2-jwt-private-key: ${OAUTH2_JWT_PRIVATE_KEY}
+  oauth2-jwt-public-key: ${OAUTH2_JWT_PUBLIC_KEY}
+  
+app:
+  frontend-url: https://ominimie.com

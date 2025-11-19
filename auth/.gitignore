@@ -38,3 +38,5 @@ build/
 .env.keys
 .helix
 !.env
+
+*_key*

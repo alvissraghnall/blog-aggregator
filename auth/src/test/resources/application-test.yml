@@ -2,11 +2,40 @@ GITHUB_CLIENT_ID: test-id
 GITHUB_CLIENT_SECRET: test-secret
 GOOGLE_CLIENT_ID: test-id
 GOOGLE_CLIENT_SECRET: test-secret
+
 spring:
-    data:
-        mongodb:
-            uri: mongodb://localhost:27017/auth_test
-    grpc:
-        client:
-            default-channel:
-                address: static://in-process-test
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/auth_test
+
+  grpc:
+    client:
+      default-channel:
+        address: static://in-process-test
+
+  mail:
+    username: xavier
+    password: godofwar
+    host: 127.0.0.1
+    port: 3025
+    protocol: smtp
+    test-connection: true
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
+      - org.springframework.boot.autoconfigure.mail.MailSenderValidatorAutoConfiguration
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+
+security:
+  oauth2-jwt-private-key: ${OAUTH2_JWT_PRIVATE_KEY}
+  oauth2-jwt-public-key: ${OAUTH2_JWT_PUBLIC_KEY}
+
+de:
+  flapdoodle: 
+    mongodb.embedded.version: 4.4.1

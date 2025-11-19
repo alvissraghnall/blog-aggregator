@@ -29,7 +29,7 @@ public class OAuth2Config {
             .clientSecret(System.getenv("GOOGLE_CLIENT_SECRET"))
             .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
             .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-            .redirectUri("{baseUrl}/oauth2/callback/{registrationId}") // Not used in gRPC
+            .redirectUri("{baseUrl}/oauth2/callback/{registrationId}")
             .scope("openid", "profile", "email")
             .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
             .tokenUri("https://oauth2.googleapis.com/token")

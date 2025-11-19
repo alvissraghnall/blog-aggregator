@@ -15,7 +15,6 @@ public class UserDTO {
 
     @NotNull
     @Size(max = 255)
-    @UserEmailUnique
     private String email;
 
     @NotNull
