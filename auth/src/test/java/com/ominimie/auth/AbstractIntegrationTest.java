@@ -1,5 +1,6 @@
 package com.ominimie.auth;
 
+import com.ominimie.AuthApplication;
 import com.ominimie.auth.api_key.repos.ApiKeyRepository;
 import com.ominimie.auth.auth_provider.repos.AuthProviderRepository;
 import com.ominimie.auth.user.repos.UserRepository;

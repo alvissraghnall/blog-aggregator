@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package com.ominimie.preferencesl;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "com.ominimie.preferences.proto";
+// option java_outer_classname = "ProfileProto";
+
+service ProfileService {
+  rpc GetProfile (GetProfileRequest) returns (UserProfileResponse);
+
+
+  rpc AdminSetSubscription (AdminSetSubscriptionRequest) returns (UserProfileResponse);
+  rpc AddInterestTag(TagRequest) returns (UserProfileResponse);
+  rpc RemoveInterestTag(TagRequest) returns (UserProfileResponse);
+
+  rpc FollowBlog(BlogRequest) returns (UserProfileResponse);
+  rpc UnfollowBlog(BlogRequest) returns (UserProfileResponse);
+
+  rpc UpdateEmailPreferences(EmailPreferencesRequest) returns (UserProfileResponse);
+
+  rpc UpdateSubscription(SubscriptionRequest) returns (UserProfileResponse);
+
+}
+
+message GetProfileRequest {
+  string user_id = 1; // UUID
+}
+
+message UpdateProfileRequest {
+  string user_id = 1; // UUID
+  
+  // Repeated fields for Lists/Sets
+  repeated string interest_tags = 2;
+  repeated string followed_blog_urls = 3;
+  
+  EmailPreferences email_preferences = 4;
+}
+
+message AdminSetSubscriptionRequest {
+    string user_id = 1;
+    SubscriptionTier tier = 2;
+    SubscriptionStatus status = 3;
+    google.protobuf.Timestamp valid_until = 4; 
+}
+
+message UserProfileResponse {
+  string user_id = 1;
+  repeated string interest_tags = 2;
+  repeated string followed_blog_urls = 3;
+  
+  EmailPreferences email_preferences = 4;
+  Subscription subscription = 5;
+
+  google.protobuf.Timestamp date_created = 6;
+  google.protobuf.Timestamp last_updated = 7;
+}
+
+message EmailPreferences {
+  Frequency frequency = 1;
+  
+  // Stored as String "HH:mm" (ISO-8601) for easier parsing to Java LocalTime
+  string preferred_time = 2; 
+  
+  // e.g. "Africa/Lagos"
+  string timezone = 3;
+  
+  bool marketing_emails_enabled = 4;
+}
+
+message Subscription {
+  SubscriptionTier tier = 1;
+  SubscriptionStatus status = 2;
+  
+  google.protobuf.Timestamp valid_until = 3;
+}
+
+enum Frequency {
+  FREQUENCY_REAL_TIME = 0;
+  FREQUENCY_DAILY = 1;
+  FREQUENCY_WEEKLY = 2;
+  FREQUENCY_PAUSED = 3;
+}
+
+enum SubscriptionTier {
+  TIER_FREE = 0;
+  TIER_PRO = 1;
+}
+
+enum SubscriptionStatus {
+  STATUS_PAUSED = 0;
+  STATUS_ACTIVE = 1;
+  STATUS_CANCELLED = 2;
+  STATUS_EXPIRED = 3;
+}
+
+message TagRequest {
+  string user_id = 1;
+  string tag = 2;
+}
+
+message BlogRequest {
+  string user_id = 1;
+  string blog_url = 2;
+}
+
+message EmailPreferencesRequest {
+  string user_id = 1;
+  EmailPreferences email_preferences = 2;
+}
+
+message SubscriptionRequest {
+  string user_id = 1;
+  Subscription subscription = 2;
+}
