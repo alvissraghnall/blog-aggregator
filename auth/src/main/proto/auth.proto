@@ -1,0 +1,140 @@
+syntax = "proto3";
+
+package com.ominimie.auth;
+
+option java_multiple_files = true;
+option java_package = "com.ominimie.auth.proto";
+
+service AuthService {
+
+  rpc Register(RegisterRequest) returns (AuthResponse);
+  rpc Login(LoginRequest) returns (AuthResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (AuthResponse);
+
+  rpc InitiateOAuth(InitiateOAuthRequest) returns (InitiateOAuthResponse);
+  rpc CompleteOAuth(CompleteOAuthRequest) returns (AuthResponse);
+
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+
+  rpc LinkProvider(LinkProviderRequest) returns (LinkProviderResponse);
+  rpc UnlinkProvider(UnlinkProviderRequest) returns (UnlinkProviderResponse);
+  rpc GetCurrentUser(GetCurrentUserRequest) returns (GetCurrentUserResponse);
+  
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse);
+  rpc ResendVerificationEmail(ResendVerificationEmailRequest) returns (ResendVerificationEmailResponse);
+}
+
+message RegisterRequest {
+  string email = 1;
+  string password = 2;
+  string full_name = 3;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+enum ProviderType {
+  UNSPECIFIED = 0;
+  LOCAL = 1;
+  GOOGLE = 2;
+  GITHUB = 3;
+  APPLE = 4;
+}
+
+message InitiateOAuthRequest {
+  ProviderType provider = 1;
+  string redirect_uri = 2; 
+}
+
+message InitiateOAuthResponse {
+  string authorization_url = 1; 
+  string state = 2; 
+}
+
+message CompleteOAuthRequest {
+  ProviderType provider = 1;
+  string code = 2; 
+  string state = 3; 
+}
+
+message AuthResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  UserInfo user = 3;
+  int64 expires_in = 4; 
+}
+
+message UserInfo {
+  string id = 1;
+  string email = 2;
+  string full_name = 3;
+  bool active = 4;
+  bool email_verified = 5;
+  repeated ProviderInfo providers = 6;
+}
+
+message ProviderInfo {
+  ProviderType provider = 1;
+  string provider_user_email = 2;
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  bool valid = 1;
+  UserInfo user = 2;
+  string error = 3;
+}
+
+message LinkProviderRequest {
+  ProviderType provider = 1;
+  string code = 2;
+  string state = 3;
+}
+
+message LinkProviderResponse {
+  bool success = 1;
+  ProviderInfo provider_info = 2;
+  string message = 3;
+}
+
+message UnlinkProviderRequest {
+  ProviderType provider = 1;
+}
+
+message UnlinkProviderResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetCurrentUserRequest {}
+
+message GetCurrentUserResponse {
+  UserInfo user = 1;
+}
+
+message VerifyEmailRequest {
+  string token = 1;
+}
+
+message VerifyEmailResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ResendVerificationEmailRequest {
+  string email = 1;
+}
+
+message ResendVerificationEmailResponse {
+  bool success = 1;
+  string message = 2;
+}

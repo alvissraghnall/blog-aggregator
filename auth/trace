@@ -1,0 +1,165 @@
+2025-10-28T23:49:31.306 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-28T23:49:37.853 helix_lsp::transport [ERROR] jdtls err <- "Oct 28, 2025 11:49:37 PM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-28T23:49:37.856 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-28T23:49:49.880 helix_lsp [ERROR] failed to initialize language server: request 0 timed out
+2025-10-28T23:49:52.557 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(0)), original request likely timed out
+2025-10-28T23:52:08.721 helix_lsp::client [WARN] language server failed to terminate gracefully - server closed the stream
+2025-10-28T23:52:09.170 helix_lsp::transport [ERROR] jdtls err: <- StreamClosed
+2025-10-28T23:52:09.170 helix_lsp [ERROR] client was already removed
+2025-10-28T23:52:09.538 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-28T23:52:14.373 helix_lsp::transport [ERROR] jdtls err <- "Oct 28, 2025 11:52:14 PM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-28T23:52:14.375 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-28T23:52:59.945 helix_term::application [WARN] Ignoring a client/registerCapability request because dynamic capability registration is not enabled. Please report this upstream to the language server
+2025-10-28T23:54:36.184 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(14)), original request likely timed out
+2025-10-28T23:56:04.390 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(26)), original request likely timed out
+2025-10-28T23:56:04.745 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(27)), original request likely timed out
+2025-10-28T23:56:05.020 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(28)), original request likely timed out
+2025-10-28T23:56:05.285 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(29)), original request likely timed out
+2025-10-29T00:00:26.950 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(74)), original request likely timed out
+2025-10-29T00:00:27.135 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(75)), original request likely timed out
+2025-10-29T00:00:27.358 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(76)), original request likely timed out
+2025-10-29T00:00:27.625 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(77)), original request likely timed out
+2025-10-29T00:01:09.179 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(91)), original request likely timed out
+2025-10-29T00:01:09.497 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(92)), original request likely timed out
+2025-10-29T00:01:09.810 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(93)), original request likely timed out
+2025-10-29T00:01:24.749 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(101)), original request likely timed out
+2025-10-29T00:01:24.950 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(102)), original request likely timed out
+2025-10-29T00:01:25.114 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(103)), original request likely timed out
+2025-10-29T00:01:25.276 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(104)), original request likely timed out
+2025-10-29T00:01:25.431 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(105)), original request likely timed out
+2025-10-29T00:04:15.683 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(120)), original request likely timed out
+2025-10-29T00:04:15.914 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(121)), original request likely timed out
+2025-10-29T00:04:35.064 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(122)), original request likely timed out
+2025-10-29T00:05:22.581 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(135)), original request likely timed out
+2025-10-29T00:05:29.316 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(136)), original request likely timed out
+2025-10-29T00:06:05.188 helix_term::handlers::signature_help [ERROR] signature help request failed: request 142 timed out
+2025-10-29T00:06:05.339 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(141)), original request likely timed out
+2025-10-29T00:06:05.341 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(142)), original request likely timed out
+2025-10-29T00:12:15.601 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T00:12:22.321 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 12:12:22 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T00:12:22.323 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T00:12:34.059 helix_lsp [ERROR] failed to initialize language server: request 0 timed out
+2025-10-29T00:12:35.250 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(0)), original request likely timed out
+2025-10-29T00:14:43.499 helix_lsp::client [WARN] language server failed to terminate gracefully - server closed the stream
+2025-10-29T01:14:07.287 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T01:14:14.169 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 1:14:14 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T01:14:14.171 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T01:14:25.549 helix_lsp [ERROR] failed to initialize language server: request 0 timed out
+2025-10-29T01:14:27.368 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(0)), original request likely timed out
+2025-10-29T01:16:12.559 helix_lsp::client [WARN] language server failed to terminate gracefully - server closed the stream
+2025-10-29T01:16:13.253 helix_lsp::transport [ERROR] jdtls err: <- StreamClosed
+2025-10-29T01:16:13.253 helix_lsp [ERROR] client was already removed
+2025-10-29T01:16:14.032 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T01:16:20.450 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 1:16:20 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T01:16:20.451 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T01:16:32.630 helix_lsp [ERROR] failed to initialize language server: request 0 timed out
+2025-10-29T01:16:33.639 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(0)), original request likely timed out
+2025-10-29T01:17:36.050 helix_lsp::client [WARN] language server failed to terminate gracefully - server closed the stream
+2025-10-29T01:17:36.363 helix_lsp::transport [ERROR] jdtls err: <- StreamClosed
+2025-10-29T01:17:36.363 helix_lsp [ERROR] client was already removed
+2025-10-29T01:17:37.509 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T01:17:42.846 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 1:17:42 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T01:17:42.848 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T01:18:31.057 helix_term::application [WARN] Ignoring a client/registerCapability request because dynamic capability registration is not enabled. Please report this upstream to the language server
+2025-10-29T01:19:27.326 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(3)), original request likely timed out
+2025-10-29T01:20:26.563 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(20)), original request likely timed out
+2025-10-29T01:20:26.923 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(21)), original request likely timed out
+2025-10-29T01:20:27.003 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(22)), original request likely timed out
+2025-10-29T01:20:27.093 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(23)), original request likely timed out
+2025-10-29T01:20:27.176 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(24)), original request likely timed out
+2025-10-29T01:20:27.262 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(25)), original request likely timed out
+2025-10-29T01:20:27.344 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(26)), original request likely timed out
+2025-10-29T01:21:13.574 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(45)), original request likely timed out
+2025-10-29T01:21:13.600 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(46)), original request likely timed out
+2025-10-29T01:21:21.279 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(54)), original request likely timed out
+2025-10-29T01:21:21.348 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(55)), original request likely timed out
+2025-10-29T01:21:21.408 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(56)), original request likely timed out
+2025-10-29T01:24:35.335 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(95)), original request likely timed out
+2025-10-29T01:24:35.382 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(96)), original request likely timed out
+2025-10-29T01:24:35.433 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(97)), original request likely timed out
+2025-10-29T01:24:35.976 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(98)), original request likely timed out
+2025-10-29T01:24:36.700 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(100)), original request likely timed out
+2025-10-29T01:24:37.264 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(101)), original request likely timed out
+2025-10-29T01:24:37.813 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(102)), original request likely timed out
+2025-10-29T01:25:54.386 helix_lsp::client [WARN] language server failed to terminate gracefully - failed to parse: invalid type: map, expected unit
+2025-10-29T06:40:45.480 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T06:40:52.403 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 6:40:52 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T06:40:52.409 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T06:41:03.936 helix_lsp [ERROR] failed to initialize language server: request 0 timed out
+2025-10-29T06:41:05.864 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(0)), original request likely timed out
+2025-10-29T06:43:02.624 helix_lsp::client [WARN] language server failed to terminate gracefully - server closed the stream
+2025-10-29T06:43:03.207 helix_lsp::transport [ERROR] jdtls err: <- StreamClosed
+2025-10-29T06:43:03.207 helix_lsp [ERROR] client was already removed
+2025-10-29T06:43:03.623 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T06:43:08.628 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 6:43:08 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T06:43:08.629 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T06:43:56.734 helix_term::application [WARN] Ignoring a client/registerCapability request because dynamic capability registration is not enabled. Please report this upstream to the language server
+2025-10-29T06:43:57.751 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(1)), original request likely timed out
+2025-10-29T06:43:59.346 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(2)), original request likely timed out
+2025-10-29T06:43:59.383 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(3)), original request likely timed out
+2025-10-29T06:43:59.400 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(4)), original request likely timed out
+2025-10-29T06:43:59.404 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(5)), original request likely timed out
+2025-10-29T06:43:59.413 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(6)), original request likely timed out
+2025-10-29T06:43:59.427 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(7)), original request likely timed out
+2025-10-29T06:43:59.436 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(8)), original request likely timed out
+2025-10-29T06:43:59.446 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(9)), original request likely timed out
+2025-10-29T06:43:59.464 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(10)), original request likely timed out
+2025-10-29T06:43:59.664 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(11)), original request likely timed out
+2025-10-29T06:43:59.666 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(12)), original request likely timed out
+2025-10-29T06:43:59.842 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(13)), original request likely timed out
+2025-10-29T06:43:59.844 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(14)), original request likely timed out
+2025-10-29T06:44:00.026 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(15)), original request likely timed out
+2025-10-29T06:44:00.028 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(16)), original request likely timed out
+2025-10-29T06:44:00.219 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(17)), original request likely timed out
+2025-10-29T06:44:00.223 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(18)), original request likely timed out
+2025-10-29T06:44:00.423 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(19)), original request likely timed out
+2025-10-29T06:44:00.425 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(20)), original request likely timed out
+2025-10-29T06:44:00.591 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(21)), original request likely timed out
+2025-10-29T06:44:00.593 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(22)), original request likely timed out
+2025-10-29T06:44:00.761 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(23)), original request likely timed out
+2025-10-29T06:44:00.764 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(24)), original request likely timed out
+2025-10-29T06:44:00.765 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(25)), original request likely timed out
+2025-10-29T06:44:00.766 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(26)), original request likely timed out
+2025-10-29T06:44:00.800 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(27)), original request likely timed out
+2025-10-29T06:44:00.810 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(28)), original request likely timed out
+2025-10-29T06:44:00.820 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(29)), original request likely timed out
+2025-10-29T06:44:00.831 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(30)), original request likely timed out
+2025-10-29T06:44:00.840 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(31)), original request likely timed out
+2025-10-29T06:44:00.849 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(32)), original request likely timed out
+2025-10-29T06:44:00.859 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(33)), original request likely timed out
+2025-10-29T06:44:01.028 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(34)), original request likely timed out
+2025-10-29T06:44:01.201 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(35)), original request likely timed out
+2025-10-29T06:44:01.203 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(36)), original request likely timed out
+2025-10-29T06:44:01.369 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(37)), original request likely timed out
+2025-10-29T06:44:01.373 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(38)), original request likely timed out
+2025-10-29T06:44:01.541 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(39)), original request likely timed out
+2025-10-29T06:44:01.543 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(40)), original request likely timed out
+2025-10-29T06:44:01.699 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(41)), original request likely timed out
+2025-10-29T06:44:01.701 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(42)), original request likely timed out
+2025-10-29T06:44:01.864 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(43)), original request likely timed out
+2025-10-29T06:44:01.866 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(44)), original request likely timed out
+2025-10-29T06:46:04.925 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(50)), original request likely timed out
+2025-10-29T06:47:05.391 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(78)), original request likely timed out
+2025-10-29T06:51:37.060 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(105)), original request likely timed out
+2025-10-29T06:54:40.003 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T06:54:46.738 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 6:54:46 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T06:54:46.740 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T06:54:58.353 helix_lsp [ERROR] failed to initialize language server: request 0 timed out
+2025-10-29T06:55:04.715 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(0)), original request likely timed out
+2025-10-29T06:56:24.452 helix_lsp::client [WARN] language server failed to terminate gracefully - server closed the stream
+2025-10-29T06:56:24.809 helix_lsp [ERROR] client was already removed
+2025-10-29T06:56:24.810 helix_lsp::transport [ERROR] jdtls err: <- StreamClosed
+2025-10-29T06:56:26.080 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T06:56:32.554 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 6:56:32 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T06:56:32.555 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T06:56:44.492 helix_lsp [ERROR] failed to initialize language server: request 0 timed out
+2025-10-29T06:56:46.529 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(0)), original request likely timed out
+2025-10-29T06:59:15.028 helix_lsp::client [WARN] language server failed to terminate gracefully - server closed the stream
+2025-10-29T06:59:15.434 helix_lsp::transport [ERROR] jdtls err: <- StreamClosed
+2025-10-29T06:59:15.435 helix_lsp [ERROR] client was already removed
+2025-10-29T06:59:16.456 helix_lsp::transport [ERROR] jdtls err <- "WARNING: Using incubator modules: jdk.incubator.vector\n"
+2025-10-29T06:59:23.578 helix_lsp::transport [ERROR] jdtls err <- "Oct 29, 2025 6:59:23 AM org.apache.aries.spifly.BaseActivator log\n"
+2025-10-29T06:59:23.580 helix_lsp::transport [ERROR] jdtls err <- "INFO: Registered provider ch.qos.logback.classic.spi.LogbackServiceProvider of service org.slf4j.spi.SLF4JServiceProvider in bundle ch.qos.logback.classic\n"
+2025-10-29T06:59:35.073 helix_lsp [ERROR] failed to initialize language server: request 0 timed out
+2025-10-29T06:59:37.939 helix_lsp::transport [ERROR] Tried sending response into a closed channel (id=Num(0)), original request likely timed out
+2025-10-29T07:02:10.049 helix_lsp::client [WARN] language server failed to terminate gracefully - server closed the stream

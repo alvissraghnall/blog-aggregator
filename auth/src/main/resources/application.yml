@@ -1,0 +1,54 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_DATABASE_URL:mongodb://localhost:27017/auth}
+      uuid-representation: standard
+      auto-index-creation: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: xx
+            client-secret: xx
+            scope: profile, email
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+        provider:
+          google:
+            user-name-attribute: email
+          github:
+            user-name-attribute: login
+      resourceserver:
+        jwt:
+          issuer-uri: https://ominimie.com
+          public-key-location: classpath:jwt-public-key.pub
+  mail:
+    host: smtp.twake.com
+    password: ${EMAIL_PASSWORD}
+    port: 587
+    properties:
+        mail:
+            smtp:
+                auth: true
+                starttls:
+                    enable: true
+    username: ${EMAIL_USERNAME}
+error:
+  handling:
+    http-status-in-json-response: true
+    exception-logging: NO_LOGGING
+    full-stacktrace-http-statuses: 5xx
+    log-levels:
+      5xx: ERROR
+    codes:
+      UserEmailUnique: USER_EMAIL_UNIQUE
+      ApiKeyKeyUnique: API_KEY_KEY_UNIQUE
+
+security:
+  oauth2-jwt-private-key: ${OAUTH2_JWT_PRIVATE_KEY}
+  oauth2-jwt-public-key: ${OAUTH2_JWT_PUBLIC_KEY}
+  
+app:
+  frontend-url: https://ominimie.com
